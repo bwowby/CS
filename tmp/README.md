@@ -112,3 +112,47 @@ N을 소인수 분해하면 p,q 값 구할 수 있고 공개키 e와 p,q를 이�
 | 퀵정렬 | nlogn | nlogn | n^2 | 
 | 힙정렬 | nlogn | nlogn | nlogn | 
 | 병합정렬 | nlogn | nlogn | nlogn | 
+
+### Quick Sort
+분할 정복으로 정렬.   
+기저 조건은 n=0,1일 때, pivot을 기준으로 왼쪽에 작은 원소, 오른쪽에 큰 원소들이 오도록 정렬.   
+피벗의 선정 방법에 따라 속도가 달라진다. 다른 nlogn 정렬보다 빠름.   
+최악의 경우 pivot이 항상 가장 작은 수로 선택 될 때로 n^2의 시간이 소요된다.   
+* Worst
+~~~
+T(n) = T(n/2) + T(n/2) + O(n) = T(0) + T(n-1) + O(n)
+     = T(n-1/2) + T(n-1/2) + O(n-1) + O(n)  =  T(0) + T(n-2) + O(n-1) + O(n)
+     = ...
+     = T(n-k) + O(n) + O(n-1) + ... + O(n-k)
+     = T(n-k) + kn-k(k-1)/2
+기저조건인 n-k가 1일 때 : T(n) = T(1) + (n-1)n-(n-1)(n-2)/2 = O(n^2)
+~~~
+   
+* Code
+~~~python
+def quickSort(array):
+    if (len(array) == 0)  | (len(array) == 1) : return array
+    
+    pivot = array[0]
+    left = getLeftArray(array[1:], pivot)
+    right = getRigthArray(array[1:], pivot)
+
+    return quickSort(left) + [pivot] + quickSort(right) 
+    
+def getLeftArray(array, pivot):
+    left = []
+    
+    for num in array :
+        if num <= pivot : left.append(num)
+    return left
+    
+def getRigthArray(array, pivot):
+    right = []
+    
+    for num in array :
+        if num > pivot : right.append(num)
+    return right
+
+~~~
+
+### Merge Sort
