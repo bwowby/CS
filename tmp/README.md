@@ -15,6 +15,15 @@ CS 복합 (_분류 및 순서는 나중에 정리..._)
   
 * 알고리즘 : [정렬 알고리즘](#정렬-알고리즘)
   * Quick Sort   
+  * Merge Sort
+ 
+* 자료구조 : [그래프](#그래프)
+  * 인접 행렬
+  * 인접 리스트
+  * DFS/BFS
+  * AVL 트리
+  * 레드블랙 
+  * 최소신장 트리   
 - - - 
    
 ## 페이지 교체 알고리즘
@@ -103,15 +112,15 @@ N을 소인수 분해하면 p,q 값 구할 수 있고 공개키 e와 p,q를 이�
 - - -
    
 ## 정렬 알고리즘
-| Name | Best | Avg | Worst | 
-| --- | --- | --- | --- | 
-| 삽입정렬 | n | n^2 | n^2 | 
-| 선택정렬 | n^2 | n^2 | n^2 | 
-| 버블정렬 | n^2 | n^2 | n^2 | 
-| 셀정렬 | n | n^1.5 | n^2 | 
-| 퀵정렬 | nlogn | nlogn | n^2 | 
-| 힙정렬 | nlogn | nlogn | nlogn | 
-| 병합정렬 | nlogn | nlogn | nlogn | 
+| Name | Best | Avg | Worst | Space complexity |
+| --- | --- | --- | --- | --- |
+| 삽입정렬 | n | n^2 | n^2 | n |
+| 선택정렬 | n^2 | n^2 | n^2 | n | 
+| 버블정렬 | n^2 | n^2 | n^2 | n |
+| 셀정렬 | n | n^1.5 | n^2 |  |
+| 퀵정렬 | nlogn | nlogn | n^2 | n |
+| 힙정렬 | nlogn | nlogn | nlogn | | 
+| 합병정렬 | nlogn | nlogn | nlogn | 2n |
 
 ### Quick Sort
 분할 정복으로 정렬.   
@@ -156,3 +165,99 @@ def getRigthArray(array, pivot):
 ~~~
 
 ### Merge Sort
+분할 정복으로 정렬.   
+기저 조건은 n=1일 때. 중간 기준으로 왼쪽 오른쪽으로 쪼개서 각각 재귀 후 리턴 받고, 리턴 한 왼쪽 오른쪽 배열을 비교하여 합병한다. 이때 정렬 결과가 임시배열에 저장됨. 
+* Code
+~~~python
+def mergeSort(data) :
+    if len(data) == 1 : 
+        return data
+    mid = len(data)//2
+    
+    left = mergeSort(data[:mid])
+    right =  mergeSort(data[mid:])
+    
+    result = []
+    
+    leftPtr = 0
+    rightPtr = 0
+    
+    while(leftPtr < len(left) or rightPtr < len(right)) : 
+        lValue = left[leftPtr] if leftPtr < len(left) else math.inf
+        rValue = right[rightPtr] if rightPtr < len(right) else math.inf
+        
+        if lValue  < rValue: 
+            result.append(lValue)
+            leftPtr += 1
+        else : 
+            result.append(rValue)
+            rightPtr += 1
+    
+    return result
+~~~
+
+- - -
+   
+## 그래프
+### 인접 행렬
+그래프의 연결관계를 2차원 배열로 나타내는 방식.   
+인접 행렬 i에서 j로 가는 간선이 존재한다면 adj[i][j] = 1, 아니면 0. 가중치가 있다면 1 대신 가중치.   
+
+### 인접 리스트
+그래프의 연결관계를 vector의 배열(vector<int>adj[])로 나타내는 방식.   
+adj[i] 는 노드 i에 연결된 노드들을 원소로 갖는 vector. 가중치가 있다면 pair<int,int>로 노드 번호, 가중치 저장하면 됨. vector에 들어간 노드의 순서는 의미없음.
+ 
+ ### DFS/BFS 
+ #### DFS
+ 깊이 우선 탐색. 재귀,스택으로 구현 가능. 하나의 노드에 대하여 leaf까지 끝까지 들어가서 탐색하는 방식. 단순 검색 속도는 BFS에 비해서 느리지만 traverse 할때 백트래킹에 많이 쓰인다. 
+
+* Code
+~~~python
+ def dfs(node) :
+   if node == leaf : 
+    doSometing() 
+    return
+   dfs(node.left)
+   dfs(node.right)
+~~~
+
+ #### DFS
+ 너비 우선 탐색. 큐로 구현 가능. 무한한 길이를 가지는 경로가 있을 경우 dfs는 무한한 경로에서 종료하지 못하지만, 모든 경로를 동시에 진행하기 때문에 탐색 가능. 그래프에서 최단경로 알아내기에 많이 사용.
+* Code
+~~~python
+ def bfs(root) :
+   q = queue.Queue()
+   q = put(root)
+     while q.qsize() > 0 : 
+        node = q.get()
+        if node : 
+           doSometing()
+        q.put(node.left)
+        q.put(node.right)
+~~~
+### AVL 트리
+이진 검색 트리이면서 balanced 트리. n개의 원소가 있을 때 O(logn) 의 복잡도로 삽입,검색,삭제 가능(레드블랙 트리보다 삽입/삭제 성능이 안좋다 -> 이유?)   
+* 규칙1. 이진 트리이면서 균형 트리
+* 규칙2. 모든 노드의 왼쪽/오른쪽 서브트리의 높이 차이는 1이하여야 함 -> 유지하려면 별짓을 다해야함...   
+LL / : 우회전  RR \ : 좌회전  RL < : 중간 노드 좌회전-> 전체 우회전  LR > : 중간 노드 우회전 -> 전체 좌회전   
+[별짓의 detail] :https://www.zerocho.com/category/Algorithm/post/583cacb648a7340018ac73f1
+* 삽입 연산 : 이진 탐색 트리처럼 왼쪽 작은 원소, 오른쪽 큰 원소로 두면서 불균형이 일어날 때 마다 회전을 시키며 균형 유지
+
+### 최소 신장 트리
+* 신장 트리(Spanning Tree)   
+그래프내의 정점을 모두 포함하는 트리.   
+n개의 정점을 가지는 그래프를 최소 간선 수인 n-1개로 연결하여 만든 트리. 하나의 그래프에는 많은 신장 트리 존재하며 사이클을 포함해서는 안된다. 
+* 최소 신장 트리(MST)   
+신장 트리 중 사용된 간선들의 가중치의 합이 최소인 트리.   
+가중치가 있는 그래프의 모든 정점을 가장 적은 수의 간선과 비용으로 연결한 것.   
+MST의 구현 방법은 크게 두개. Kruskal,Prim   
+
+  + Kruskal [detail] : https://gmlwjd9405.github.io/2018/08/29/algorithm-kruskal-mst.html   
+O(n^2). ```greedy 하게 모든 정점을 최소비용으로``` 선택하여 연결하는 답을 구하는 것. 간선 선택 기반.   
+간선의 가중치를 오름차순으로 정렬해 작은 것 부터 선택해 나가는 알고리즘.   
+이때 다음에 선택할 간선이 사이클을 만드는지의 여부를 검사할 때 union-find 사용   
+  + Prim [detail] : https://gmlwjd9405.github.io/2018/08/30/algorithm-prim-mst.html   
+O(eloge). 시작 정점을 기준으로 가장 낮은 가중치와 연결된 정점을 먼저 선택하며 확장해 나가는 것. 정점 선택 기반.   
+트리를 확장하면서 n-1개 간선을 가질 때 까지 반복.
+
+그래프 내에서 적은 숫자의 간선 가지는 희소 그래프의 경우 크루스칼 적합. 간선이 많은 밀집 그래프의 경우 프림이 적합.
