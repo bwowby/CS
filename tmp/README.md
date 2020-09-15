@@ -200,7 +200,13 @@ def mergeSort(data) :
     
     return result
 ~~~
-
+#### 퀵 소트 vs 머지 소트
+https://medium.com/pocs/locality%EC%9D%98-%EA%B4%80%EC%A0%90%EC%97%90%EC%84%9C-quick-sort%EA%B0%80-merge-sort%EB%B3%B4%EB%8B%A4-%EB%B9%A0%EB%A5%B8-%EC%9D%B4%EC%9C%A0-824798181693   
+Locality 측면에서 보자면 Merge Sort < Quick Sort. 머지소트는 쪼개어진 반쪽짜리를 각각 소팅하고 x n 하기 때문에 끝과 끝을 왔다갔다하며 데이터를 탐색하게 되고 데이터가 좌우로 계속 움직이며 정렬된다. 또 내부적으로 정렬된 데이터를 복사해야하기 때문에 더 많은 시간 소요됨.   
+반면 Quick Sort는 피봇 기준으로 쪼개어진 앞쪽 부분부터 정렬이 되기 때문에 데이터들이 넓은 범위에서 움직이지 않으며 pivot 주변에서 데이터 이동이 일어나기 때문에 자주 캐쉬에 있는 페이지들을 교체할 필요가 없으므로 HW적으로 더 효율적.
+>TIM SORT?!   
+https://d2.naver.com/helloworld/0315536
+Merge Sort + Insertion Sort
 - - -
    
 ## 그래프
@@ -275,7 +281,7 @@ O(eloge). 시작 정점을 기준으로 가장 낮은 가중치와 연결된 정
 https://shoark7.github.io/programming/knowledge/difference-between-process-and-thread
 ### 프로세스
 ```메모리에 적재되어 실행되고 있는 프로그램.``` 동적. 프로그램의 인스턴스.   
-운영체제가 관리하며 시간,자원을 할당받아 실행됨. 메모리 공간 상에서 ```Code,Data,Heap,Stack``` 영역으로 나뉜다. 각각의 프로세스는 독립적으로 관리되며 서로 자원을 공유하는 일도 없다(대신 같은 프로그램의 프로세스는 Code 영역 공유)   
+운영체제가 관리하며 시간,자원을 할당받아 실행됨. 메모리 공간 상에서 ```Code(Method,Class,Static),PC Register,Heap,Stack``` 영역으로 나뉜다. 각각의 프로세스는 독립적으로 관리되며 서로 자원을 공유하는 일도 없다(대신 같은 프로그램의 프로세스는 Code 영역 공유)   
 
 ### 스레드
 프로세스 내에서 실행되는 흐름. 모든 하나의 프로세스는 메인 스레드에서 시작되며 실행된다. 한 프로세스 안의 스레드들은 ```스택 공간을 제외한 나머지 영역과 자원을 공유.```   
