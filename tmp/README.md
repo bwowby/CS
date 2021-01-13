@@ -32,6 +32,11 @@ CS 복합 (_분류 및 순서는 나중에 정리..._)
 * 네트워크 : [IP와 IP주소](#IP-IP주소)
   + IP
   + IP 주소
+ 
+* DNS : [DNS](#DNS)
+  + DNS 
+  + DNS 서버
+  + 도메인 질의 과정
   
 - - - 
    
@@ -308,4 +313,31 @@ https://shoark7.github.io/programming/knowledge/difference-between-process-and-t
 * IPv4. 32비트로 구성된 네트워크상 컴퓨터를 식별하기 위한 논리적 주소. 물리적 주소인 MAC과 구별됨.    
 * 네트워크 주소(-.-.-)와 호스트 주소(.-) 로 조합되어 구성.   
 * 패킷의 IP 헤더에는 반드시 보내는 곳, 받는 곳의 IP 주소가 추가됨.
-* -.-.-.0 : 네트워크 주소와  -.-.-.255 : 브로드캐스팅 주소는 사용 불가.
+* -.-.-.0 : 네트워크 주소와  -.-.-.255 : 브로드캐스팅 주소는 사용 불가.   
+
+
+- - -
+   
+## DNS  
+### DNS   
+ * Domain Name System 도메인 이름의 수직적 체계
+ * 도메인 구입 시 각 체계별 도메인을 지정하여 등록하며 3->2->1 단계 순으로 표기
+ * 인터넷 도메인 체계는 최상위 루트 도메인 서버로 시작
+ * 1단계 도메인(TLD): 국가최상위 도메인/일반 최상위 도메인으로 구분(kr,jp,us../com,net,org...)
+ * 2단계 도메인(SLD): 도메인을 등록한 조직 나타냄(ac,co..)
+ * 3단계 도메인(Domain Name): 임의로 지정 가능한 자율적 이름(naver,google...)
+ ><img src = "https://xn--3e0bx5euxnjje69i70af08bea817g.xn--3e0b707e/images/domain/imgDomainSys02.gif"/>   
+ 
+### DNS 서버   
+* Domain Name Server   
+* 네트워크 상 고유 식별자인 ip 주소를 기본 체계로 하나, 이 주소를 인간이 기억하기 편한 언어체계로 변환하는 작업을 해줌.   
+* 도메인 이름으로 요청한 클라이언트는 돌려받은 IP 주소로 라우터를 통해 목적지에 접속. 
+### 도메인 질의 과정
+1. ```abcd.com``` 도메인 입력 시 /etc/resolve.conf 에 지정된 네임 서버(resolver)로 도메인 주소에 대한 요청 전달
+2. resolver에 있는 루트 네임 서버의 IP 기록한 hint 파일을 참조해 루트 네임 서버로 요청 전달.
+3. 루트 네임 서버가 가진 TLD 네임 서버명과 IP 주소(glue record)를 참조하여 .com 네임서버를 참조하라고 응답.
+4. .com 네임 서버가 가진 글루레코드를 참조하여 ```abcd.com``` 네임서버 참조하라고 응답.
+5. ```abcd.com``` 네임 서버는 도메인에 대한 zone 파일을 참조하여 ```abcd.com```의 IP 주소를 최초요청한 1번의 네임서버로 돌려준다.
+6. 최초 요청을 받은 네임서버는 클라이언트에게 IP 주소 전송.
+* DNS 서버는 한번 검색할 결과를 메모리의 캐쉬에 기록하여 사용하며, TTL이 정해져 있어 유효기간 지난 정보는 삭제함.   
+><img src ="https://d1.awsstatic.com/Route53/how-route-53-routes-traffic.8d313c7da075c3c7303aaef32e89b5d0b7885e7c.png"/>
